@@ -1,6 +1,6 @@
 # Team Task Manager
 
-A full-stack Team Task Management Web Application built as part of a Full-Stack Coding Assignment. Think of it as a simplified version of tools like Trello or Asana, where multiple users can manage tasks efficiently within teams and projects.
+A full-stack Team Task Management Web Application where multiple users can manage tasks efficiently within teams and projects.
 
 ---
 
@@ -153,9 +153,11 @@ npm run dev
 ```
 
 ### 4. Open the App
+```text
 Frontend: http://localhost:5173
 Backend:  http://localhost:5000
 Health:   http://localhost:5000/api/health
+```
 ---
 
 ## 🚀 Deployment (Railway)
@@ -177,7 +179,7 @@ This application is deployed on Railway.
 1. Add a new service in the same Railway project.
 2. Select the same repository and set root to `/client`.
 3. Add environment variable:
-   - VITE_API_URL=https://[your-backend].up.railway.app
+   - VITE_API_URL=https://backend-production-d55e.up.railway.app
 4. Set build command: `npm run build`
 5. Set start command: `npx serve -s dist`
 6. Deploy and copy the frontend URL.
@@ -248,7 +250,7 @@ This application is deployed on Railway.
 - ✅ Live Application URL (Railway)
 - ✅ GitHub Repository
 - ✅ README with setup and deployment steps
-- ⬜ 2-5 minute demo video (to be added)
+- ✅ Demo Video: https://drive.google.com/drive/folders/1PbcA4iGlSUms3wJ2C9ijEBPgpBsL0KZ3?usp=sharing
 
 ---
 
