@@ -24,7 +24,7 @@ const Login = () => {
     setLoading(true);
     setError('');
     try {
-      const { data } = await api.post('/auth/login', form);
+      const { data } = await api.post('auth/login', form);
       login(data);
       toast.success(`Welcome back, ${data.name}!`);
       navigate('/dashboard');

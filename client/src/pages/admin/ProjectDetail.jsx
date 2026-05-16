@@ -38,9 +38,9 @@ const ProjectDetail = () => {
   const fetchAll = async () => {
     try {
       const [projRes, tasksRes, usersRes] = await Promise.all([
-        api.get(`/projects/${id}`),
-        api.get(`/tasks?projectId=${id}`),
-        isAdmin ? api.get('/users') : Promise.resolve({ data: [] }),
+        api.get(`projects/${id}`),
+        api.get(`tasks?projectId=${id}`),
+        isAdmin ? api.get('users') : Promise.resolve({ data: [] }),
       ]);
       setProject(projRes.data);
       setTasks(tasksRes.data);
@@ -82,11 +82,11 @@ const ProjectDetail = () => {
     try {
       const payload = { ...taskForm, project: id };
       if (editingTask) {
-        const { data } = await api.put(`/tasks/${editingTask._id}`, payload);
+        const { data } = await api.put(`tasks/${editingTask._id}`, payload);
         setTasks((t) => t.map((task) => (task._id === data._id ? data : task)));
         toast.success('Task updated!');
       } else {
-        const { data } = await api.post('/tasks', payload);
+        const { data } = await api.post('tasks', payload);
         setTasks((t) => [data, ...t]);
         toast.success('Task created!');
       }
@@ -106,7 +106,7 @@ const ProjectDetail = () => {
     try {
       // Optimistic update
       setTasks((prev) => prev.map((t) => (t._id === taskId ? { ...t, status } : t)));
-      const { data } = await api.put(`/tasks/${taskId}`, { status });
+      const { data } = await api.put(`tasks/${taskId}`, { status });
       setTasks((prev) => prev.map((t) => (t._id === data._id ? data : t)));
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to update status');
@@ -123,7 +123,7 @@ const ProjectDetail = () => {
     try {
       // Optimistic update
       setTasks((prev) => prev.map((t) => (t._id === taskId ? { ...t, priority } : t)));
-      const { data } = await api.put(`/tasks/${taskId}`, { priority });
+      const { data } = await api.put(`tasks/${taskId}`, { priority });
       setTasks((prev) => prev.map((t) => (t._id === data._id ? data : t)));
       toast.success('Priority updated');
     } catch (err) {
@@ -136,7 +136,7 @@ const ProjectDetail = () => {
   const handleDeleteTask = async (taskId) => {
     if (!window.confirm('Delete this task?')) return;
     try {
-      await api.delete(`/tasks/${taskId}`);
+      await api.delete(`tasks/${taskId}`);
       setTasks((t) => t.filter((task) => task._id !== taskId));
       toast.success('Task deleted');
     } catch (err) {
@@ -189,7 +189,7 @@ const ProjectDetail = () => {
 
   const handleSaveMembers = async () => {
     try {
-      const { data } = await api.put(`/projects/${id}/members`, { members: selectedMembers });
+      const { data } = await api.put(`projects/${id}/members`, { members: selectedMembers });
       setProject(data);
       setShowMembersModal(false);
       toast.success('Members updated');
@@ -201,12 +201,12 @@ const ProjectDetail = () => {
   const handleRemoveMember = async () => {
     if (!memberToRemove) return;
     try {
-      const { data } = await api.delete(`/projects/${id}/members/${memberToRemove._id}`);
+      const { data } = await api.delete(`projects/${id}/members/${memberToRemove._id}`);
       setProject(data);
       setSelectedMembers(data.members.map(m => m._id));
       setMemberToRemove(null);
       // We also need to refresh tasks because tasks were unassigned!
-      const tasksRes = await api.get(`/tasks?projectId=${id}`);
+      const tasksRes = await api.get(`tasks?projectId=${id}`);
       setTasks(tasksRes.data);
       toast.success('Member removed and tasks unassigned');
     } catch (err) {

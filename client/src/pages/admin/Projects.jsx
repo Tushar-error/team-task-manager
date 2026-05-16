@@ -23,7 +23,7 @@ const Projects = () => {
 
   const fetchProjects = async () => {
     try {
-      const { data } = await api.get('/projects');
+      const { data } = await api.get('projects');
       setProjects(data);
     } catch (err) {
       toast.error('Failed to load projects');
@@ -55,7 +55,7 @@ const Projects = () => {
         setProjects((p) => p.map((proj) => (proj._id === data._id ? data : proj)));
         toast.success('Project updated');
       } else {
-        const { data } = await api.post('/projects', form);
+        const { data } = await api.post('projects', form);
         setProjects((p) => [data, ...p]);
         toast.success('Project created');
       }

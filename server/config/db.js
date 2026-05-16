@@ -28,14 +28,24 @@ const connectDB = async () => {
     console.log(`✅  MongoDB connected: ${conn.connection.host}`);
   } catch (error) {
     console.error(`❌  MongoDB connection error: ${error.message}`);
-    console.error(
-      '\n📋  Atlas troubleshooting:\n' +
-      '    1. Resume cluster at cloud.mongodb.com (free tier auto-pauses)\n' +
-      '    2. Network Access → Add IP → 0.0.0.0/0 (allow all)\n' +
-      '    3. Verify MONGO_URI credentials in server/.env\n'
-    );
+    
+    // Provide specific troubleshooting advice based on error type
+    if (error.name === 'MongooseServerSelectionError') {
+      console.error(
+        '\n📋  Atlas Connection Troubleshooting:\n' +
+        '    1. IP Whitelist: Go to MongoDB Atlas -> Network Access -> Add IP -> Allow Access from Anywhere (0.0.0.0/0).\n' +
+        '    2. Cluster Paused: Check if your cluster is paused at cloud.mongodb.com and resume it.\n' +
+        '    3. Credentials: Check if your MONGO_URI contains the correct username and password.\n'
+      );
+    } else if (error.message.includes('Authentication failed')) {
+      console.error('❌  Authentication failed: Please check the username and password in your MONGO_URI.');
+    }
+
     if (process.env.NODE_ENV === 'production') {
+      console.error('🛑  CRITICAL: Database connection failed in production. Exiting process...');
       process.exit(1);
+    } else {
+      console.warn('⚠️  Continuing in non-production mode despite DB failure. Some features may not work.');
     }
   }
 };

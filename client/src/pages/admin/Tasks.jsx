@@ -41,9 +41,9 @@ const Tasks = () => {
       if (searchQuery) params.append('search', searchQuery);
 
       const [tasksRes, projRes, usersRes] = await Promise.all([
-        api.get(`/tasks?${params.toString()}`),
-        api.get('/projects'),
-        isAdmin ? api.get('/users') : Promise.resolve({ data: [] }),
+        api.get(`tasks?${params.toString()}`),
+        api.get('projects'),
+        isAdmin ? api.get('users') : Promise.resolve({ data: [] }),
       ]);
       setTasks(tasksRes.data);
       setProjects(projRes.data);
@@ -87,11 +87,11 @@ const Tasks = () => {
     setSaving(true);
     try {
       if (editingTask) {
-        const { data } = await api.put(`/tasks/${editingTask._id}`, taskForm);
+        const { data } = await api.put(`tasks/${editingTask._id}`, taskForm);
         setTasks((t) => t.map((task) => (task._id === data._id ? data : task)));
         toast.success('Task updated!');
       } else {
-        const { data } = await api.post('/tasks', taskForm);
+        const { data } = await api.post('tasks', taskForm);
         setTasks((t) => [data, ...t]);
         toast.success('Task created!');
       }
@@ -109,7 +109,7 @@ const Tasks = () => {
 
     try {
       setTasks((prev) => prev.map((t) => (t._id === taskId ? { ...t, status } : t)));
-      const { data } = await api.put(`/tasks/${taskId}`, { status });
+      const { data } = await api.put(`tasks/${taskId}`, { status });
       setTasks((prev) => prev.map((t) => (t._id === data._id ? data : t)));
       toast.success('Status updated');
     } catch (err) {
@@ -124,7 +124,7 @@ const Tasks = () => {
 
     try {
       setTasks((prev) => prev.map((t) => (t._id === taskId ? { ...t, priority } : t)));
-      const { data } = await api.put(`/tasks/${taskId}`, { priority });
+      const { data } = await api.put(`tasks/${taskId}`, { priority });
       setTasks((prev) => prev.map((t) => (t._id === data._id ? data : t)));
       toast.success('Priority updated');
     } catch (err) {
@@ -136,7 +136,7 @@ const Tasks = () => {
   const handleDelete = async (taskId) => {
     if (!window.confirm('Delete this task?')) return;
     try {
-      await api.delete(`/tasks/${taskId}`);
+      await api.delete(`tasks/${taskId}`);
       setTasks((t) => t.filter((task) => task._id !== taskId));
       toast.success('Task deleted');
     } catch (err) {

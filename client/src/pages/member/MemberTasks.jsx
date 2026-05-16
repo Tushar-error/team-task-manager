@@ -12,7 +12,7 @@ const MemberTasks = () => {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const { data } = await api.get(`/tasks?assignedTo=${user._id}`);
+        const { data } = await api.get(`tasks?assignedTo=${user._id}`);
         setTasks(data);
       } catch (err) {
         console.error('Failed to load member tasks', err);

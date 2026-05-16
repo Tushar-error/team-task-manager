@@ -20,7 +20,7 @@ const AdminTeam = () => {
     try {
       setError(false);
       setLoading(true);
-      const { data } = await api.get('/admin/users');
+      const { data } = await api.get('admin/users');
       setUsers(data);
       setRetryCount(0); // reset on success
     } catch (err) {
@@ -56,7 +56,7 @@ const AdminTeam = () => {
     e.preventDefault();
     setSaving(true);
     try {
-      await api.post('/admin/create-admin', form);
+      await api.post('admin/create-admin', form);
       toast.success('Admin created successfully');
       setShowModal(false);
       fetchUsers();

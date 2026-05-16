@@ -20,8 +20,8 @@ const Dashboard = () => {
     const fetchData = async () => {
       try {
         const [statsRes, projectsRes] = await Promise.all([
-          api.get('/tasks/dashboard'),
-          api.get('/projects'),
+          api.get('tasks/dashboard'),
+          api.get('projects'),
         ]);
         setStats(statsRes.data);
         setProjects(projectsRes.data.slice(0, 4));

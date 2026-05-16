@@ -91,7 +91,10 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: false }));
 
 // ── Routes ────────────────────────────────────────────────────────────────────
+// Register auth routes with both /api prefix and without to handle misconfigured clients
 app.use('/api/auth', authRoutes);
+app.use('/auth', authRoutes);
+
 app.use('/api/users', userRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/tasks', taskRoutes);
@@ -104,10 +107,13 @@ app.get('/', (req, res) => {
 // Health check
 app.get('/api/health', (req, res) => {
   const mongoose = require('mongoose');
+  const dbStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
+  
   res.json({
-    status: 'OK',
+    status: 'ok',
+    database: dbStatus,
+    environment: process.env.NODE_ENV || 'development',
     timestamp: new Date().toISOString(),
-    db: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
   });
 });
 
@@ -128,6 +134,16 @@ app.use((err, req, res, next) => {
 // ── Start Server ──────────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
-  console.log(`📡 CORS origin: ${process.env.CLIENT_URL || 'http://localhost:5173'}`);
+  const mode = process.env.NODE_ENV || 'development';
+  const corsOrigin = process.env.CLIENT_URL || 'http://localhost:5173';
+  
+  console.log('\n🚀  Server is up and running!');
+  console.log(`📡  Port: ${PORT}`);
+  console.log(`🌍  Mode: ${mode}`);
+  console.log(`🔒  CORS allowed origin: ${corsOrigin}`);
+  
+  const mongoose = require('mongoose');
+  const dbState = mongoose.connection.readyState;
+  const dbStatus = dbState === 1 ? '✅ Connected' : dbState === 2 ? '⏳ Connecting...' : '❌ Disconnected';
+  console.log(`📦  Database: ${dbStatus}\n`);
 });

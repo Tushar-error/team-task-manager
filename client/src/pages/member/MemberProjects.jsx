@@ -12,7 +12,7 @@ const MemberProjects = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const { data } = await api.get('/projects');
+        const { data } = await api.get('projects');
         // Filter projects where user is a member
         const myProjects = data.filter(p => p.members.some(m => m._id === user._id) || p.createdBy === user._id);
         setProjects(myProjects);

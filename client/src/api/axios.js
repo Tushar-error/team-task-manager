@@ -4,9 +4,17 @@ import axios from 'axios';
  * Axios instance pre-configured with the base URL.
  * Automatically attaches the JWT token from localStorage to every request.
  */
-const baseURL = import.meta.env.VITE_API_URL || '/api';
+let rawBaseURL = import.meta.env.VITE_API_URL || '';
+
+// Normalize baseURL:
+// 1. If empty (local development with proxy), use '/api/'
+// 2. Otherwise, ensure it doesn't have a trailing slash, then append '/api/'
+const baseURL = !rawBaseURL 
+  ? '/api/' 
+  : rawBaseURL.replace(/\/+$/, '') + '/api/';
+
 const api = axios.create({
-  baseURL: baseURL.endsWith('/api') ? baseURL : `${baseURL}/api`,
+  baseURL,
   headers: { 'Content-Type': 'application/json' },
 });
 

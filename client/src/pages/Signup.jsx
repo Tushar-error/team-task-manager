@@ -33,7 +33,7 @@ const Signup = () => {
     setLoading(true);
     setError('');
     try {
-      const { data } = await api.post('/auth/signup', form);
+      const { data } = await api.post('auth/signup', form);
       login(data);
       toast.success(`Welcome to Team Task Manager, ${data.name}!`);
       navigate('/dashboard');
