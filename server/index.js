@@ -63,7 +63,7 @@ connectDB().then(async () => {
 });
 
 const app = express();
-app.set('trust proxy', 1);
+app.set('trust proxy', true); // Trust Railway proxy for express-rate-limit and CORS
 
 // ── Security Middleware ───────────────────────────────────────────────────────
 app.use(helmet());
@@ -96,6 +96,11 @@ app.use('/api/users', userRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/admin', adminRoutes);
+// Root route for Railway health checks
+app.get('/', (req, res) => {
+  res.status(200).send('Team Task Manager API is running');
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
   const mongoose = require('mongoose');
