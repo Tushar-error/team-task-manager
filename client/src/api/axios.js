@@ -4,8 +4,9 @@ import axios from 'axios';
  * Axios instance pre-configured with the base URL.
  * Automatically attaches the JWT token from localStorage to every request.
  */
+const baseURL = import.meta.env.VITE_API_URL || '/api';
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL: baseURL.endsWith('/api') ? baseURL : `${baseURL}/api`,
   headers: { 'Content-Type': 'application/json' },
 });
 
